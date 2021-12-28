@@ -2,7 +2,8 @@
   <div>
     <input type="checkbox" />
     <span>{{ item.name }}</span>
-    <input type="color" v-model="color" @change="changeColor" />
+    <input type="number" v-model.number="number" @change="changeValue" />
+    <input type="color" v-model="color" @change="changeValue" />
   </div>
 </template>
 
@@ -12,16 +13,18 @@ export default {
   data() {
     return {
       color: this.item.color,
+      number: this.item.number,
     };
   },
   methods: {
-    changeColor() {
+    changeValue() {
       const payload = {
         listId: this.listId,
         itemId: this.item.id,
         newColor: this.color,
+        newNumber: this.number,
       };
-      this.$store.dispatch("changeColor", payload);
+      this.$store.dispatch("changeValue", payload);
     },
   },
 };

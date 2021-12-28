@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    {{ lists }}
     <Selector class="half" :lists="lists" />
     <Display class="half" :lists="lists" />
   </div>
@@ -20,18 +19,9 @@ export default {
       lists: {},
     };
   },
-  beforeMount() {
-    const nlists = Math.round(Math.random() * 10);
-    for (let i = 0; i < nlists; i++) {
-      const nitems = Math.round(Math.random() * 10);
-      this.lists[`List ${i + 1}`] = {};
-      for (let j = 0; j < nitems; j++) {
-        this.lists[`List ${i + 1}`][`Item ${j + 1}`] = {
-          number: Math.round(Math.random() * 50),
-          color: Math.floor(Math.random() * 16777215).toString(16),
-        };
-      }
-    }
+  mounted() {
+    this.$store.dispatch("randomData");
+    this.lists = this.$store.getters.getLists;
   },
 };
 </script>

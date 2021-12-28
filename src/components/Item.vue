@@ -1,14 +1,14 @@
 <template>
   <div>
     <input type="checkbox" />
-    <span>{{ name }}</span>
+    <span>{{ item.name }}</span>
     <input type="color" v-model="color" @change="changeColor" />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["item", "name"],
+  props: ["item", "listId"],
   data() {
     return {
       color: this.item.color,
@@ -16,7 +16,12 @@ export default {
   },
   methods: {
     changeColor() {
-      this.$emit("changeColor", this.color, this.name);
+      const payload = {
+        listId: this.listId,
+        itemId: this.item.id,
+        newColor: this.color,
+      };
+      this.$store.dispatch("changeColor", payload);
     },
   },
 };

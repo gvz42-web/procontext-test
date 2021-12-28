@@ -1,13 +1,12 @@
 <template>
   <div>
-    <div @click="openList"><input type="checkbox" />{{ name }}</div>
+    <div @click="openList"><input type="checkbox" />{{ list.name }}</div>
     <Item
       v-show="isListOpen"
-      v-for="(item, name) of list.items"
+      v-for="item of list.items"
       :key="item.id"
-      :name="name"
       :item="item"
-      @changeColor="changeColor"
+      :listId="list.id"
     ></Item>
   </div>
 </template>
@@ -16,7 +15,7 @@
 import Item from "@/components/Item";
 export default {
   components: { Item },
-  props: ["list", "name"],
+  props: ["list"],
   data() {
     return {
       isListOpen: false,
@@ -25,10 +24,6 @@ export default {
   methods: {
     openList() {
       this.isListOpen = !this.isListOpen;
-    },
-    changeColor(newColor, itemName) {
-      const listName = this.name;
-      this.$store.dispatch("changeColor", { listName, itemName, newColor });
     },
   },
 };

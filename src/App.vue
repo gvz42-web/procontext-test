@@ -14,14 +14,13 @@ export default {
     Display,
     Selector,
   },
-  data() {
-    return {
-      lists: {},
-    };
+  computed: {
+    lists() {
+      return this.$store.getters.getLists;
+    },
   },
-  mounted() {
+  beforeMount() {
     this.$store.dispatch("randomData");
-    this.lists = this.$store.getters.getLists;
   },
 };
 </script>

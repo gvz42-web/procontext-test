@@ -25,13 +25,33 @@ export default new Vuex.Store({
         return list;
       });
     },
+    fillSelected(state, lists) {
+      state.selected = lists.map((list) => ({
+        id: list.id,
+        name: list.name,
+        items: [],
+      }));
+    },
+    selectItem(state, payload) {
+      state.selected = state.selected.map((list) => {
+        if (list.id === payload.listId) {
+          const index = list.items.indexOf(payload.itemId);
+          if (index === -1) {
+            list.items.push(payload.itemId);
+          } else {
+            list.items.splice(index, 1);
+          }
+        }
+        return list;
+      });
+    },
   },
   actions: {
     randomData({ commit }) {
       const lists = [];
-      const nlists = Math.round(Math.random() * 10) + 3;
+      const nlists = 3;
       for (let i = 0; i < nlists; i++) {
-        const nitems = Math.round(Math.random() * 10) + 2;
+        const nitems = Math.round(Math.random() * 6) + 4;
         lists.push({
           id: i,
           name: `List ${i + 1}`,
@@ -47,14 +67,28 @@ export default new Vuex.Store({
         }
       }
       commit("randomData", lists);
+      commit("fillSelected", lists);
     },
     changeValue({ commit }, payload) {
       commit("changeValue", payload);
+    },
+    selectItem({ commit }, payload) {
+      commit("selectItem", payload);
     },
   },
   getters: {
     getLists(state) {
       return state.lists;
+    },
+    getSelected(state) {
+      return state.selected;
+    },
+    getItem(state) {
+      return (listId, itemId) => {
+        return state.lists
+          .find((list) => list.id === listId)
+          .items.find((item) => item.id === itemId);
+      };
     },
   },
 });

@@ -29,6 +29,7 @@ export default new Vuex.Store({
       state.selected = lists.map((list) => ({
         id: list.id,
         name: list.name,
+        selected: "none",
         items: [],
       }));
     },
@@ -40,6 +41,24 @@ export default new Vuex.Store({
             list.items.push(payload.itemId);
           } else {
             list.items.splice(index, 1);
+          }
+        }
+        return list;
+      });
+    },
+    selectList(state, listId) {
+      const allItems =
+        state.lists
+          .find((list) => list.id === listId)
+          .items.map((item) => item.id) || [];
+      state.selected = state.selected.map((list) => {
+        if (listId === list.id) {
+          if (list.selected === "few" || list.selected === "none") {
+            list.items = allItems;
+            list.selected = "all";
+          } else {
+            list.items = [];
+            list.selected = "none";
           }
         }
         return list;
@@ -75,6 +94,9 @@ export default new Vuex.Store({
     selectItem({ commit }, payload) {
       commit("selectItem", payload);
     },
+    selectList({ commit }, listId) {
+      commit("selectList", listId);
+    },
   },
   getters: {
     getLists(state) {
@@ -88,6 +110,32 @@ export default new Vuex.Store({
         return state.lists
           .find((list) => list.id === listId)
           .items.find((item) => item.id === itemId);
+      };
+    },
+    isItemSelected(state) {
+      return (listId, itemId) => {
+        return (
+          state.selected
+            .find((list) => list.id === listId)
+            .items.indexOf(itemId) !== -1
+        );
+      };
+    },
+    listSelectState(state) {
+      return (listId) => {
+        const allItems =
+          state.lists
+            .find((list) => list.id === listId)
+            .items.map((item) => item.id) || [];
+        const selectedItems = state.selected.find(
+          (list) => listId === list.id
+        ).items;
+        if (allItems.length === selectedItems.length) {
+          return "all";
+        } else if (selectedItems.length === 0) {
+          return "none";
+        }
+        return "few";
       };
     },
   },

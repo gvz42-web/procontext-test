@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div @click.self="openList"><input type="checkbox" />{{ list.name }}</div>
+    <div @click.self="openList">
+      <input
+        type="checkbox"
+        :indeterminate.prop="isIndeterminate"
+        v-model="isChecked"
+      />{{ list.name }}
+    </div>
     <Item
       v-show="isListOpen"
       v-for="item of list.items"
@@ -19,11 +25,32 @@ export default {
   data() {
     return {
       isListOpen: false,
+      checked: false,
     };
+  },
+  computed: {
+    listSelectState() {
+      return this.$store.getters.listSelectState(this.list.id);
+    },
+    isIndeterminate() {
+      return this.listSelectState === "few";
+    },
+    isChecked: {
+      set() {
+        console.log("ggigig");
+        this.$store.dispatch("selectList", this.list.id);
+      },
+      get() {
+        return this.listSelectState === "all";
+      },
+    },
   },
   methods: {
     openList() {
       this.isListOpen = !this.isListOpen;
+    },
+    selectList() {
+      this.$store.dispatch("selectList", this.list.id);
     },
   },
 };

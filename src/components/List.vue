@@ -1,20 +1,22 @@
 <template>
   <div>
-    <div @click.self="openList">
+    <div @click.self="openList" class="list">
       <input
         type="checkbox"
         :indeterminate.prop="isIndeterminate"
         v-model="isChecked"
       />{{ list.name }}
     </div>
-    <Item
-      v-show="isListOpen"
-      v-for="item of list.items"
-      :key="item.id"
-      :item="item"
-      :listId="list.id"
-      v-model="checkedList"
-    />
+    <div class="items">
+      <Item
+        v-show="isListOpen"
+        v-for="item of list.items"
+        :key="item.id"
+        :item="item"
+        :listId="list.id"
+        v-model="checkedList"
+      />
+    </div>
   </div>
 </template>
 
@@ -71,4 +73,25 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.list {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  color: #fff;
+  background: rgb(63, 124, 251);
+  background: linear-gradient(
+    63deg,
+    rgba(63, 124, 251, 1) 0%,
+    rgba(63, 153, 251, 1) 100%
+  );
+  box-shadow: 0px 0px 42px -11px rgba(34, 60, 80, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.items {
+  padding-left: 40px;
+}
+</style>

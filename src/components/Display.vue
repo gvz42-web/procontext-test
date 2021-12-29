@@ -1,13 +1,15 @@
 <template>
   <div>
-    <div v-for="list of lists" :key="list.id">
-      {{ list.name }}
-      <DrawItems
-        v-for="item of list.items"
-        :key="item"
-        :item="item"
-        :listId="list.id"
-      />
+    <div class="card">
+      <div v-for="list of lists" :key="list.id">
+        {{ list.name }}
+        <DrawItems
+          v-for="item of list.items"
+          :key="item"
+          :item="item"
+          :listId="list.id"
+        />
+      </div>
     </div>
   </div>
 </template>

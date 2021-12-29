@@ -1,6 +1,8 @@
 <template>
   <div>
-    <List v-for="list of lists" :key="list.id" :list="list" />
+    <div class="card">
+      <List v-for="list of lists" :key="list.id" :list="list" />
+    </div>
   </div>
 </template>
 

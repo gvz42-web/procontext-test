@@ -33,33 +33,10 @@ export default new Vuex.Store({
         items: [],
       }));
     },
-    selectItem(state, payload) {
-      state.selected = state.selected.map((list) => {
+    updateSelected(state, payload) {
+      state.selected.map((list) => {
         if (list.id === payload.listId) {
-          const index = list.items.indexOf(payload.itemId);
-          if (index === -1) {
-            list.items.push(payload.itemId);
-          } else {
-            list.items.splice(index, 1);
-          }
-        }
-        return list;
-      });
-    },
-    selectList(state, listId) {
-      const allItems =
-        state.lists
-          .find((list) => list.id === listId)
-          .items.map((item) => item.id) || [];
-      state.selected = state.selected.map((list) => {
-        if (listId === list.id) {
-          if (list.selected === "few" || list.selected === "none") {
-            list.items = allItems;
-            list.selected = "all";
-          } else {
-            list.items = [];
-            list.selected = "none";
-          }
+          list.items = payload.items;
         }
         return list;
       });
@@ -91,11 +68,8 @@ export default new Vuex.Store({
     changeValue({ commit }, payload) {
       commit("changeValue", payload);
     },
-    selectItem({ commit }, payload) {
-      commit("selectItem", payload);
-    },
-    selectList({ commit }, listId) {
-      commit("selectList", listId);
+    updateSelected({ commit }, payload) {
+      commit("updateSelected", payload);
     },
   },
   getters: {
@@ -112,30 +86,9 @@ export default new Vuex.Store({
           .items.find((item) => item.id === itemId);
       };
     },
-    isItemSelected(state) {
-      return (listId, itemId) => {
-        return (
-          state.selected
-            .find((list) => list.id === listId)
-            .items.indexOf(itemId) !== -1
-        );
-      };
-    },
-    listSelectState(state) {
+    getSelectedItems(state) {
       return (listId) => {
-        const allItems =
-          state.lists
-            .find((list) => list.id === listId)
-            .items.map((item) => item.id) || [];
-        const selectedItems = state.selected.find(
-          (list) => listId === list.id
-        ).items;
-        if (allItems.length === selectedItems.length) {
-          return "all";
-        } else if (selectedItems.length === 0) {
-          return "none";
-        }
-        return "few";
+        return state.selected.find((list) => list.id === listId).items;
       };
     },
   },

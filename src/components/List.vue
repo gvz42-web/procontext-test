@@ -13,6 +13,7 @@
       :key="item.id"
       :item="item"
       :listId="list.id"
+      v-model="checkedList"
     />
   </div>
 </template>
@@ -25,32 +26,46 @@ export default {
   data() {
     return {
       isListOpen: false,
-      checked: false,
     };
   },
   computed: {
-    listSelectState() {
-      return this.$store.getters.listSelectState(this.list.id);
+    listAllItems() {
+      return this.list.items.map((item) => item.id);
     },
     isIndeterminate() {
-      return this.listSelectState === "few";
+      return (
+        this.checkedList.length > 0 &&
+        this.checkedList.length !== this.listAllItems.length
+      );
     },
     isChecked: {
       set() {
-        console.log("ggigig");
-        this.$store.dispatch("selectList", this.list.id);
+        if (this.checkedList.length !== this.listAllItems.length) {
+          this.checkedList = this.listAllItems;
+        } else {
+          this.checkedList = [];
+        }
       },
       get() {
-        return this.listSelectState === "all";
+        return this.checkedList.length === this.listAllItems.length;
+      },
+    },
+    checkedList: {
+      set(items) {
+        const payload = {
+          listId: this.list.id,
+          items: items,
+        };
+        this.$store.dispatch("updateSelected", payload);
+      },
+      get() {
+        return this.$store.getters.getSelectedItems(this.list.id);
       },
     },
   },
   methods: {
     openList() {
       this.isListOpen = !this.isListOpen;
-    },
-    selectList() {
-      this.$store.dispatch("selectList", this.list.id);
     },
   },
 };

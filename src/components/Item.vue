@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="checkbox" v-model="selected" />
+    <input type="checkbox" v-model="selected" :value="item.id" />
     <span>{{ item.name }}</span>
     <input type="number" v-model.number="number" @change="changeValue" />
     <input type="color" v-model="color" @change="changeValue" />
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  props: ["item", "listId"],
+  props: ["item", "listId", "value"],
   data() {
     return {
       color: this.item.color,
@@ -18,18 +18,11 @@ export default {
   },
   computed: {
     selected: {
-      set() {
-        if (this.number < 0) {
-          this.number = 0;
-        }
-        const payload = {
-          listId: this.listId,
-          itemId: this.item.id,
-        };
-        this.$store.dispatch("selectItem", payload);
+      set(value) {
+        this.$emit("input", value);
       },
       get() {
-        return this.$store.getters.isItemSelected(this.listId, this.item.id);
+        return this.value;
       },
     },
   },

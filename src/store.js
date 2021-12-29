@@ -58,7 +58,9 @@ export default new Vuex.Store({
             id: j,
             name: `Item ${j + 1}`,
             number: Math.round(Math.random() * 30) + 10,
-            color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+            color:
+              "#" +
+              ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
           });
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click.self="openList" class="list">
+    <div @click.self="openList" :class="['list', { selected: isListOpen }]">
       <input
         type="checkbox"
         :indeterminate.prop="isIndeterminate"
@@ -8,14 +8,16 @@
       />{{ list.name }}
     </div>
     <div class="items">
-      <Item
-        v-show="isListOpen"
-        v-for="item of list.items"
-        :key="item.id"
-        :item="item"
-        :listId="list.id"
-        v-model="checkedList"
-      />
+      <transition-group name="slide">
+        <Item
+          v-show="isListOpen"
+          v-for="item of list.items"
+          :key="item.id"
+          :item="item"
+          :listId="list.id"
+          v-model="checkedList"
+        />
+      </transition-group>
     </div>
   </div>
 </template>
@@ -90,6 +92,28 @@ export default {
   border-radius: 10px;
   cursor: pointer;
   margin-bottom: 10px;
+}
+.slide-enter-active {
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+}
+
+.slide-leave-active {
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slide-enter-to,
+.slide-leave {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+  overflow: hidden;
+  max-height: 0;
 }
 .items {
   padding-left: 40px;

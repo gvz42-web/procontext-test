@@ -1,11 +1,14 @@
 <template>
   <div class="item-dots">
-    <div
-      class="dot"
-      v-for="dot of itemData.number"
-      :key="dot"
-      :style="style"
-    ></div>
+    <transition-group name="dots" tag="div">
+      <div
+        class="dot dots-item"
+        v-for="dot of itemData.number"
+        :key="dot"
+        :style="style"
+        @click="decreaseNumber"
+      ></div>
+    </transition-group>
   </div>
 </template>
 
@@ -22,6 +25,16 @@ export default {
       };
     },
   },
+  methods: {
+    decreaseNumber() {
+      const payload = {
+        listId: this.listId,
+        itemId: this.item,
+        newNumber: this.itemData.number - 1,
+      };
+      this.$store.commit("changeValue", payload);
+    },
+  },
 };
 </script>
 
@@ -31,6 +44,17 @@ export default {
   width: 15px;
   height: 15px;
   margin-right: 4px;
-  border-radius: 50%;
+}
+
+.dots-item {
+  transition: all 0.2s;
+}
+.dots-enter,
+.dots-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.dots-leave-active {
+  position: absolute;
 }
 </style>

@@ -5,8 +5,8 @@
       <span>{{ item.name }}</span>
     </div>
     <div class="settings">
-      <input type="number" v-model.number="number" @change="changeValue" />
-      <input type="color" v-model="color" @change="changeValue" />
+      <input type="number" v-model.number="number" />
+      <input type="color" v-model="color" />
     </div>
   </div>
 </template>
@@ -14,12 +14,6 @@
 <script>
 export default {
   props: ["item", "listId", "value"],
-  data() {
-    return {
-      color: this.item.color,
-      number: this.item.number,
-    };
-  },
   computed: {
     selected: {
       set(value) {
@@ -29,17 +23,33 @@ export default {
         return this.value;
       },
     },
+    number: {
+      set(value) {
+        this.changeValue(false, value);
+      },
+      get() {
+        return this.item.number;
+      },
+    },
+    color: {
+      set(value) {
+        this.changeValue(value, false);
+      },
+      get() {
+        return this.item.color;
+      },
+    },
   },
   methods: {
-    changeValue() {
-      if (this.number < 0) {
-        this.number = Math.abs(this.number);
+    changeValue(color, number) {
+      if (number < 0) {
+        number = Math.abs(this.number);
       }
       const payload = {
         listId: this.listId,
         itemId: this.item.id,
-        newColor: this.color,
-        newNumber: this.number,
+        newColor: color,
+        newNumber: number,
       };
       this.$store.dispatch("changeValue", payload);
     },

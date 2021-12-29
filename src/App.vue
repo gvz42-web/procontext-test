@@ -37,5 +37,14 @@ export default {
 .half {
   width: 50%;
   height: 100%;
+  padding: 100px;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  box-shadow: 0px 0px 46px 4px rgba(34, 60, 80, 0.2);
+  padding: 40px;
+  overflow-y: auto;
 }
 </style>

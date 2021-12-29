@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <input type="checkbox" v-model="selected" :value="item.id" />
-    <span>{{ item.name }}</span>
-    <input type="number" v-model.number="number" @change="changeValue" />
-    <input type="color" v-model="color" @change="changeValue" />
+  <div class="item">
+    <div class="name">
+      <input type="checkbox" v-model="selected" :value="item.id" />
+      <span>{{ item.name }}</span>
+    </div>
+    <div class="settings">
+      <input type="number" v-model.number="number" @change="changeValue" />
+      <input type="color" v-model="color" @change="changeValue" />
+    </div>
   </div>
 </template>
 
@@ -43,4 +47,20 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  margin: 10px 0;
+}
+.name {
+  display: flex;
+  align-items: center;
+}
+.settings {
+  display: flex;
+  align-items: center;
+}
+</style>
